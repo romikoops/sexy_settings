@@ -1,0 +1,3 @@
+default_property: default DEFAULT value
+overwritten_property: default OVERWRITTEN value
+console_property: default CONSOLE value

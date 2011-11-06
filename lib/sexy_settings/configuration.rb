@@ -9,9 +9,10 @@ module SexySettings
     }
     DEFAULT_OPTIONS.keys.each{|option| attr_writer option}
 
+    #TODO should be reimplemented without method_missing
     def method_missing(name, *args)
       if DEFAULT_OPTIONS.has_key?(name)
-        send(name) || DEFAULT_OPTIONS[name]
+        self.instance_variable_get("@#{name}") || DEFAULT_OPTIONS[name]
       else
         raise "Method '#{name}' is missing"
       end

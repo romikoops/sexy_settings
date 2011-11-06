@@ -1,15 +1,13 @@
-require 'sexy_settings/base'
-
 module SexySettings
   # Used internally to ensure examples get reloaded between multiple runs in
   # the same process.
   def self.reset
-    self.configuration
+    self.configuration.class::DEFAULT_OPTIONS.keys.each{|key| self.configuration.send("#{key}=", nil)}
   end
 
   # Returns the global configuration object
   def self.configuration
-    @configuration ||= Configuration.new
+    @configuration ||= SexySettings::Configuration.new
   end
 
   # Yields the global configuration object
@@ -20,6 +18,10 @@ module SexySettings
   #   config.env_variable_with_options = 'OPTIONS'
   # end
   def self.configure
-    yield configuration if block_given?
+    if block_given?
+      yield configuration
+    else
+      self.configuration
+    end
   end
 end

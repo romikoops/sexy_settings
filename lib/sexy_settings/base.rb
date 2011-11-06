@@ -4,25 +4,25 @@ require 'yaml'
 module SexySettings
   class Base
     include Singleton
-    attr_reader :default, :custom, :command_line, :all_properties
+    attr_reader :default, :custom, :command_line, :all
 
     # Priorities: command_line > custom.yml > default.yml > nil
     def initialize
-      config = self.configuration
+      config = SexySettings.configuration
       @default = load_settings(config.path_to_default_settings)
       @default = @default.merge({config.project_directory_option => config.path_to_project})
       @custom = load_settings(config.path_to_custom_settings)
-      @all_properties = @default.merge(@custom)
+      @all = @default.merge(@custom)
       @command_line = {}
       unless ENV[config.env_variable_with_options].nil?
         ENV[config.env_variable_with_options].split(",").each{|opt_line| parse_setting(opt_line) if opt_line }
       end
-      @all_properties.merge!(@command_line)
-      @all_properties.each_pair{|k, v| @all_properties[k] = get_compound_value(v)}
+      @all.merge!(@command_line)
+      @all.each_pair{|k, v| @all[k] = get_compound_value(v)}
     end
 
-    def pretty_formatted_properties
-      props_list = @all_properties.to_a
+    def print_all
+      props_list = @all.to_a
       max_key_size = props_list.map{|el| el.first.to_s.size}.max
       res = []
       res << ("###############################################################")
@@ -50,7 +50,7 @@ module SexySettings
     def get_compound_value(value)
       if /\$\{(.*?)\}/.match(value.to_s)
         var = /\$\{(.*?)\}/.match(value.to_s)[1]
-        exist_var = @all_properties[var]
+        exist_var = @all[var]
         raise ArgumentError, "Did you define this setting '#{var}' before?" if exist_var.nil?
         value["${#{var}}"] = exist_var.to_s if var
         get_compound_value(value)
@@ -58,11 +58,12 @@ module SexySettings
       value
     end
 
+    #TODO should be reimplemented without method missing
     def method_missing(name, *args)
       if name.to_s =~ /=$/
-        @all_properties[name.to_s] = args[0] if @all_properties.has_key?(name.to_s)
+        @all[name.to_s] = args[0] if @all_properties.has_key?(name.to_s)
       else
-        @all_properties[name.to_s]
+        @all[name.to_s]
       end
     end
 
