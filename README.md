@@ -44,7 +44,6 @@ It was tested with Ruby 1.9.2, but assumes it should work with other Ruby versio
  end
  ```
 
-
  Specify shortcut method for Settings object:
 
  ```ruby
@@ -63,13 +62,14 @@ The priority ranks with respect to the setting places are as follows:
 Thus, specifying some setting in command line will override the same setting value specified in <_default config file_> or <_custom config file_>
 
 Example:
+
 > default.yaml>>
->    foo: bar
->    foo1: default ${foo}
->    foo2: default value
+> > > foo: bar
+> > > foo1: default ${foo}
+> > > foo2: default value
 
 > overwritten.yaml>>
->    foo1: custom ${foo}
+> > > foo1: custom ${foo}
 
 set environment variable:
 
