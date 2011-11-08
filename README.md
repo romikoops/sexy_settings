@@ -5,10 +5,11 @@ Flexible specifying of application settings
 ## What is Sexy Settings?
 
 It is Ruby library for flexible specifying of application settings different ways:
+
 * from YAML file(default and custom settings)
 * from command line
 
-## What's new in 0.0.1
+### What's new in 0.0.1
 
 Init version with base functionality
 
@@ -19,15 +20,15 @@ Init version with base functionality
 It was tested with Ruby 1.9.2, but assumes it should work with other Ruby version as well
 ### Installation
 
-   gem install sexy_settings
+>   gem install sexy_settings
 
 ### Configuration
 
  Create 2 configuration files, for default and custom settings. For instance,
 
- > config
- > > > default.yaml
- > > > overwritten.yaml
+>   config
+>     default.yaml
+>     overwritten.yaml
 
  Place next code to boot executable ruby file:
 
@@ -52,38 +53,40 @@ It was tested with Ruby 1.9.2, but assumes it should work with other Ruby versio
  end
  ```
 
- ### Using
+### Using
 
- There are 4 possible values of settings
- The priority ranks with respect to the setting places are as follows:
- > **command line** < **custom** < **default** < **nil**_(in case setting was not specified anywhere)_
+There are 4 possible values of settings
+The priority ranks with respect to the setting places are as follows:
 
- Thus, specifying some setting in command line will override the same setting value specified in <_default config file_> or <_custom config file_>
+> **command line** < **custom** < **default** < **nil**_(in case setting was not specified anywhere)_
 
- Example:
- default.yaml>>
-  foo: bar
-  foo1: default ${foo}
-  foo2: default value
+Thus, specifying some setting in command line will override the same setting value specified in <_default config file_> or <_custom config file_>
 
- overwritten.yaml>>
-  foo1: custom ${foo}
+Example:
+> default.yaml>>
+>    foo: bar
+>    foo1: default ${foo}
+>    foo2: default value
 
- set environment variable:
- OPTIONS="foo2=10$$$foo3=:hi$$$foo4=true"
+> overwritten.yaml>>
+>    foo1: custom ${foo}
 
- ```ruby
- puts settings.foo # returns 'bar'
- puts settings.foo1 # returns 'custom foo'
- puts settings.foo2 # returns 10
- puts settings.foo3 # returns :hi
- puts settings.foo4 # returns true
- ```
+set environment variable:
+
+> OPTIONS="foo2=10$$$foo3=:hi$$$foo4=true"
+
+```ruby
+puts settings.foo # returns 'bar'
+puts settings.foo1 # returns 'custom foo'
+puts settings.foo2 # returns 10
+puts settings.foo3 # returns :hi
+puts settings.foo4 # returns true
+```
 
 
- ## Hints
+## Hints
 
- * Add <__default config file__> under version control system
- * Add <__custom config file__> to ignore list
- * Use command line with using Environment Variable for quick specifying setting in your Continuous Integration System
- * Use @puts settings.as_formatted_text@ method for output all settings as pretty formatted text
+* Add <_default config file_> under version control system
+* Add <_custom config file_> to ignore list
+* Use command line with using Environment Variable for quick specifying setting in your Continuous Integration System
+* Use @puts settings.as_formatted_text@ method for output all settings as pretty formatted text
