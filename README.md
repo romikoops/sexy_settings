@@ -27,8 +27,8 @@ It was tested with Ruby 1.9.2, but assumes it should work with other Ruby versio
  Create 2 configuration files, for default and custom settings. For instance,
 
 >   config
->     default.yaml
->     overwritten.yaml
+    default.yaml
+    overwritten.yaml
 
  Place next code to boot executable ruby file:
 
@@ -63,15 +63,21 @@ Thus, specifying some setting in command line will override the same setting val
 
 Example:
 
-> default.yaml>>
-> > > foo: bar
-> > > foo1: default ${foo}
-> > > foo2: default value
+_default.yaml_
 
-> overwritten.yaml>>
-> > > foo1: custom ${foo}
+```yaml
+  foo: bar
+  foo1: default ${foo}
+  foo2: default value
+```
 
-set environment variable:
+ _overwritten.yaml_
+
+```yaml
+  foo1: custom ${foo}
+```
+
+Set environment variable:
 
 > OPTIONS="foo2=10$$$foo3=:hi$$$foo4=true"
 
@@ -89,4 +95,8 @@ puts settings.foo4 # returns true
 * Add <_default config file_> under version control system
 * Add <_custom config file_> to ignore list
 * Use command line with using Environment Variable for quick specifying setting in your Continuous Integration System
-* Use @puts settings.as_formatted_text@ method for output all settings as pretty formatted text
+* Use next code for output all settings as pretty formatted text
+
+```ruby
+puts settings.as_formatted_text
+```
