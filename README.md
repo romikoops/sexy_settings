@@ -26,9 +26,11 @@ It was tested with Ruby 1.9.2, but assumes it should work with other Ruby versio
 
  Create 2 configuration files, for default and custom settings. For instance,
 
->   config
+```
+config\
     default.yaml
     overwritten.yaml
+```
 
  Place next code to boot executable ruby file:
 
@@ -95,7 +97,7 @@ puts settings.foo4 # returns true
 * Add <_default config file_> under version control system
 * Add <_custom config file_> to ignore list
 * Use command line with using Environment Variable for quick specifying setting in your Continuous Integration System
-* Use next code for output all settings as pretty formatted text
+* Use next code for output all settings as pretty formatted text:
 
 ```ruby
 puts settings.as_formatted_text
