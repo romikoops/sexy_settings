@@ -2,15 +2,15 @@ require 'spec_helper'
 
 describe 'Core' do
   it "should have ability to reset settings" do
-    new_path = 'path/to/file'
-    old_path = nil
+    new_delim = '#@#'
+    old_delim = nil
     SexySettings.configure do |config|
-      old_path = config.path_to_project
-      config.path_to_project = 'path/to/file'
+      old_delim = config.cmd_line_option_delimiter
+      config.cmd_line_option_delimiter = new_delim
     end
-    SexySettings.configuration.path_to_project.should ==(new_path)
+    SexySettings.configuration.cmd_line_option_delimiter.should ==(new_delim)
     SexySettings.reset
-    SexySettings.configuration.path_to_project.should ==(old_path)
+    SexySettings.configuration.cmd_line_option_delimiter.should ==(old_delim)
   end
 
   it "should return the same configuration object each time" do

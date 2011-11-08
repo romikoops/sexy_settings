@@ -7,7 +7,6 @@ describe 'Base' do
       config.path_to_custom_settings = File.expand_path("overwritten.yaml", File.join(File.dirname(__FILE__), '..', '_config'))
       config.path_to_project = File.dirname(__FILE__)
       config.env_variable_with_options = 'OPTIONS'
-      config.project_directory_option = 'project_directory'
     end
     if ENV.has_key?(SexySettings.configuration.env_variable_with_options)
       @original_options = ENV[SexySettings.configuration.env_variable_with_options]
@@ -35,8 +34,7 @@ describe 'Base' do
     expected_default_settings = {
         "default_property" => "default DEFAULT value",
         "overwritten_property" => "default OVERWRITTEN value",
-        "console_property" => "default CONSOLE value",
-        "project_directory" => SexySettings.configuration.path_to_project
+        "console_property" => "default CONSOLE value"
     }
     @settings.default.should == expected_default_settings
   end
@@ -55,40 +53,64 @@ describe 'Base' do
     expected_all_settings = {
         "default_property" => "default DEFAULT value",
         "overwritten_property" => "overwritten OVERWRITTEN value",
-        "console_property" => "console CONSOLE value",
-        "project_directory" => SexySettings.configuration.path_to_project}
+        "console_property" => "console CONSOLE value"
+    }
     @settings.all.should == expected_all_settings
   end
 
-  it "should print all settings in pretty formatted manner" do
-    pending("implement test for me")
-    #@settings.print_all #TODO implement test for me
-  end
+  it "should return specified pretty formatted settings for output" do
+    expected = <<-eos
+#######################################################
+#                    All Settings                     #
+#######################################################
 
-  it "should return project dir correctly" do
-    @settings.project_directory.should == File.dirname(__FILE__) #TODO it is bug, and should be fixed
+  console_property      =  console CONSOLE value
+  default_property      =  default DEFAULT value
+  overwritten_property  =  overwritten OVERWRITTEN value
+eos
+    @settings.as_formatted_text.should == expected
   end
 
   context "command line" do
     before :all do
       SexySettings.configure.env_variable_with_options = 'OPTS'
-      ENV['OPTS'] = "string=Test, int=1, float=1.09, boolean_true=true, boolean_false=false, symbol=:foo"
+      ENV['OPTS'] = "string=Test, int=1, float=1.09, boolean_true=true, boolean_false=false, symbol=:foo, reference = ${string}"
+      @clone_settings = settings.class.clone.instance
     end
 
     after :all do
       SexySettings.configure.env_variable_with_options = 'OPTIONS'
     end
 
-    it "should convert command line values to correct types" do
-      pending("fix test")
-      #TODO fix test
-      #settings.send(:initialize)
-      #settings.string.should == 'Test'
-      #settings.int.should == 1
-      #settings.float.should == 1.09
-      #settings.boolean_true.should be_true
-      #settings.boolean_false.should be_false
-      #settings.symbol.should == :foo
+    it "should convert command line string value to String type" do
+      @clone_settings.string.should == 'Test'
+    end
+
+    it "should convert command line integer value to Fixnum type" do
+      @clone_settings.int.should == 1
+      @clone_settings.int.class.should == Fixnum
+    end
+
+    it "should convert command line float value to Float type" do
+      @clone_settings.float.should == 1.09
+      @clone_settings.float.class.should == Float
+    end
+
+    it "should convert command line true value to TrueClass type" do
+      @clone_settings.boolean_true.should be_true
+    end
+
+    it "should convert command line false value to FalseClass type" do
+      @clone_settings.boolean_false.should be_false
+      @clone_settings.boolean_false.class.should == FalseClass
+    end
+
+    it "should convert command line symbol value to Symbol type" do
+      @clone_settings.symbol.should == :foo
+    end
+
+    it "should replace command line reference to correct value" do
+      @clone_settings.reference == 'Test'
     end
   end
 end

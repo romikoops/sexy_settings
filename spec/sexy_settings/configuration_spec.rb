@@ -7,7 +7,7 @@ describe 'Configuration' do
         :path_to_custom_settings => "custom.yml",
         :path_to_project => '.',
         :env_variable_with_options => 'OPTS',
-        :project_directory_option => 'project_dir'
+        :cmd_line_option_delimiter => ','
     }
     @config = SexySettings::Configuration.new
   end

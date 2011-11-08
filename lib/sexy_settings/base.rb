@@ -10,27 +10,33 @@ module SexySettings
     def initialize
       config = SexySettings.configuration
       @default = load_settings(config.path_to_default_settings)
-      @default = @default.merge({config.project_directory_option => config.path_to_project})
       @custom = load_settings(config.path_to_custom_settings)
       @all = @default.merge(@custom)
       @command_line = {}
       unless ENV[config.env_variable_with_options].nil?
-        ENV[config.env_variable_with_options].split(",").each{|opt_line| parse_setting(opt_line) if opt_line }
+        ENV[config.env_variable_with_options].split(config.cmd_line_option_delimiter).each{|opt_line| parse_setting(opt_line) if opt_line }
       end
       @all.merge!(@command_line)
       @all.each_pair{|k, v| @all[k] = get_compound_value(v)}
     end
 
-    def print_all
-      props_list = @all.to_a
+    def as_formatted_text(which=:all)
+      props_list = case which
+                     when :all then @all
+                     when :custom then @custom
+                     when :default then @default
+                     else ''
+                    end.to_a
       max_key_size = props_list.map{|el| el.first.to_s.size}.max
       res = []
-      res << ("###############################################################")
-      res << ("#                          Settings                           #")
-      res << ("###############################################################")
-      res << ""
+      title = "##{' '*20}#{which.to_s.capitalize} Settings#{' '*21}#"
+      sharp_line = '#'*title.size
+      res << sharp_line
+      res << title
+      res << sharp_line
+      res << ''
       res += props_list.map{|el| "#{indent}#{el[0]}#{indent + indent(max_key_size - el[0].to_s.size)}=#{indent}#{el[1]}"}.sort
-      res << ""
+      res << ''
       res.join("\n")
     end
 
@@ -58,10 +64,9 @@ module SexySettings
       value
     end
 
-    #TODO should be reimplemented without method missing
     def method_missing(name, *args)
       if name.to_s =~ /=$/
-        @all[name.to_s] = args[0] if @all_properties.has_key?(name.to_s)
+        @all[name.to_s] = args[0] if @all.has_key?(name.to_s)
       else
         @all[name.to_s]
       end
@@ -78,8 +83,10 @@ module SexySettings
           value.to_f
         elsif (value.downcase == 'true') #boolean
           true
-        elsif (value.downcase == 'true') #boolean
+        elsif (value.downcase == 'false') #boolean
           false
+        elsif /^:(.+)$/.match(value)
+          $1.to_sym
         else
           value # can't parse, return String
         end
