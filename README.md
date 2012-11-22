@@ -1,5 +1,7 @@
 # Sexy Settings
 
+[![Dependency Status](https://gemnasium.com/romikoops/sexy_settings.png)](https://gemnasium.com/romikoops/sexy_settings)
+
 Flexible specifying of application settings
 
 ## What is Sexy Settings?
