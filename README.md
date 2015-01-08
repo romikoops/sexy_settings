@@ -2,31 +2,31 @@
 
 [![Dependency Status](https://gemnasium.com/romikoops/sexy_settings.png)](https://gemnasium.com/romikoops/sexy_settings)
 
-Flexible specifying of application settings
+Application settings are specified in a flexible way.
 
 ## What is Sexy Settings?
 
-It is Ruby library for flexible specifying of application settings different ways:
+It is a Ruby-based library used to specify application settings in different ways:
 
-* from YAML file(default and custom settings)
-* from command line
+* Using the YAML file (default and custom settings).
+* Using the command line.
 
 ### What's new in 0.0.1
 
-Init version with base functionality
+First version with the base functionality.
 
 ## Getting Started
 
 ### Prerequisites
 
-It was tested with Ruby 1.9.2, but assumes it should work with other Ruby version as well
+It was tested with Ruby 1.9.2 but we expect it to also work with other Ruby versions
 ### Installation
 
 >   gem install sexy_settings
 
 ### Configuration
 
- Create 2 configuration files, for default and custom settings. For instance,
+Create 2 configuration files, one for default settings and the other one – for custom settings, e.g.:
 
 ```
 config\
@@ -34,7 +34,7 @@ config\
     overwritten.yaml
 ```
 
- Place next code to boot executable ruby file:
+  Insert the following code to the boot executable ruby file:
 
  ```ruby
  require 'sexy_settings'
@@ -48,7 +48,7 @@ config\
  end
  ```
 
- Specify shortcut method for Settings object:
+  Specify a shortcut method for the Settings object:
 
  ```ruby
  def settings
@@ -56,14 +56,15 @@ config\
  end
  ```
 
-### Using
+### Usage
 
-There are 4 possible values of settings
-The priority ranks with respect to the setting places are as follows:
+There are 4 possible settings values. The priority ranks with respect to the settings location are as follows:
+
 
 > **command line** < **custom** < **default** < **nil**_(in case setting was not specified anywhere)_
+> **command line** < **custom** < **default** < **nil**_(if the setting was not specified anywhere)_.
 
-Thus, specifying some setting in command line will override the same setting value specified in <_default config file_> or <_custom config file_>
+Thus, specifying some setting in the command line will override the same setting value specified in the <_default config file_> or <_custom config file_>
 
 Example:
 
@@ -81,7 +82,7 @@ _default.yaml_
   foo1: custom ${foo}
 ```
 
-Set environment variable:
+Set an environment variable:
 
 > OPTIONS="foo2=10$$$foo3=:hi$$$foo4=true"
 
@@ -96,10 +97,10 @@ puts settings.foo4 # returns true
 
 ## Hints
 
-* Add <_default config file_> under version control system
-* Add <_custom config file_> to ignore list
-* Use command line with using Environment Variable for quick specifying setting in your Continuous Integration System
-* Use next code for output all settings as pretty formatted text:
+* Add <_default config file_> under the version control system.
+* Add <_custom config file_> to ignore the list.
+*	Use the command line with an Environment Variable for fast specifying setting in your Continuous Integration System.
+* Use the following code to output all settings as a pretty formatted text:
 
 ```ruby
 puts settings.as_formatted_text
