@@ -62,7 +62,6 @@ There are 4 possible settings values. The priority ranks with respect to the set
 
 
 > **command line** < **custom** < **default** < **nil**_(in case setting was not specified anywhere)_
-> **command line** < **custom** < **default** < **nil**_(if the setting was not specified anywhere)_.
 
 Thus, specifying some setting in the command line will override the same setting value specified in the <_default config file_> or <_custom config file_>
 
