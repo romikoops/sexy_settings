@@ -1,6 +1,11 @@
 # Sexy Settings
 
-[![Dependency Status](https://gemnasium.com/romikoops/sexy_settings.png)](https://gemnasium.com/romikoops/sexy_settings)
+[![Build Status](https://travis-ci.org/romikoops/sexy_settings.svg?branch=master)][travis]
+[![Dependency Status](https://gemnasium.com/romikoops/sexy_settings.png)][gemnasium]
+
+[travis]: https://travis-ci.org/romikoops/sexy_settings
+[gemnasium]: https://gemnasium.com/romikoops/sexy_settings
+(https://gemnasium.com/romikoops/sexy_settings)
 
 Application settings are specified in a flexible way.
 
