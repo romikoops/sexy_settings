@@ -1,34 +1,46 @@
+# frozen_string_literal: true
 require 'spec_helper'
 
 describe 'Configuration' do
-  before :all do
-    @expected_opts = {
-        :path_to_default_settings => "default.yml",
-        :path_to_custom_settings => "custom.yml",
-        :path_to_project => '.',
-        :env_variable_with_options => 'OPTS',
-        :cmd_line_option_delimiter => ','
+  let(:expected_opts) do
+    {
+      path_to_default_settings: 'default.yml',
+      path_to_custom_settings: 'custom.yml',
+      path_to_project: '.',
+      env_variable_with_options: 'SEXY_SETTINGS',
+      cmd_line_option_delimiter: ','
     }
-    @config = SexySettings::Configuration.new
+  end
+  let(:config) { SexySettings::Configuration.new }
+
+  it 'should have correct default options' do
+    expect(SexySettings::Configuration.constants).to include(:DEFAULT_OPTIONS)
+    expect(SexySettings::Configuration::DEFAULT_OPTIONS).to eq(expected_opts)
   end
 
-  it "should have correct default options" do
-    SexySettings::Configuration.constants.should include(:DEFAULT_OPTIONS)
-    SexySettings::Configuration::DEFAULT_OPTIONS.should == @expected_opts
+  it 'should have setters for all options' do
+    expected_opts.keys.each { |key| expect(config).to be_respond_to("#{key}=") }
   end
 
-  it "should have setters for all options" do
-    @expected_opts.keys.each{|key| @config.respond_to?("#{key}=").should be_true}
-  end
-
-  it "should return last value of specified option" do
+  it 'should return last value of specified option' do
     new_value = 'fake'
-    @expected_opts.keys.each{|key| @config.send("#{key}=", new_value)}
-    @expected_opts.keys.each{|key| @config.send(key).should == new_value}
+    expected_opts.keys.each do |key|
+      config.send("#{key}=", new_value)
+      expect(config.send(key)).to eq(new_value)
+    end
   end
 
-  it "should return default value of specified option" do
-    config = SexySettings::Configuration.new
-    @expected_opts.keys.each{|key| config.send(key).should == @expected_opts[key]}
+  it 'should return default value of specified option' do
+    expected_opts.keys.each { |key| expect(config.send(key)).to eq(expected_opts[key]) }
+  end
+
+  context 'when SEXY_SETTINGS_DELIMITER env variable specified' do
+    before { ENV['SEXY_SETTINGS_DELIMITER'] = '$' }
+    after { ENV['SEXY_SETTINGS_DELIMITER'] = nil }
+
+    it 'should override specified delimiter' do
+      config.cmd_line_option_delimiter = ';'
+      expect(config.cmd_line_option_delimiter).to eq('$')
+    end
   end
 end

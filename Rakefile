@@ -1,8 +1,18 @@
-require "bundler/gem_tasks"
+# frozen_string_literal: true
+require 'rubygems'
+require 'bundler'
+Bundler.setup
 
-desc 'Spec all functionality of gem'
-task :spec_all do
-  system("rspec spec/*/")
-end
+require 'rake'
+require 'yard'
+require 'rspec/core/rake_task'
+require 'rubocop/rake_task'
 
-task :default => :spec_all
+Bundler::GemHelper.install_tasks
+RSpec::Core::RakeTask.new(:spec) { |_spec| }
+
+YARD::Rake::YardocTask.new { |_t| }
+
+RuboCop::RakeTask.new
+
+task default: [:rubocop, :spec]

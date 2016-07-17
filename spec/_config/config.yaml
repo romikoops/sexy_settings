@@ -1,3 +1,11 @@
 default_property: default DEFAULT value
 overwritten_property: default OVERWRITTEN value
 console_property: default CONSOLE value
+pass: 123
+user_pass: helloworld
+api_key: '12341234123222333'
+password_confirmation: 'mysuperpass'
+passenger_name: 'Ivan Petrov'
+api_token: wer221wfqw23ef
+my_secret: ssdf3fvqww
+keyword: ewggsdfgdeee
