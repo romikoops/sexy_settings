@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+
+# Core module
 module SexySettings
   # Used internally to ensure examples get reloaded between multiple runs in
   # the same process.
