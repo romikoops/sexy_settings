@@ -106,7 +106,8 @@ module SexySettings
       data = ENV[config.env_variable_with_options]
       return if data.nil?
       delimiter = config.cmd_line_option_delimiter
-      @command_line = data.split(delimiter).map { |el| parse_setting(el) if el }.compact.to_h
+      data = data.split(delimiter).map { |el| parse_setting(el) if el }.compact
+      @command_line = Hash[data]
     end
 
     def init_all_settings
