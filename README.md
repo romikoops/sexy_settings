@@ -67,7 +67,7 @@ Thus, specifying some setting in the command line will override the same setting
 
 Example:
 
-_default.yaml_
+_default.yml_
 
 ```yaml
   foo: bar
@@ -75,7 +75,7 @@ _default.yaml_
   foo2: default value
 ```
 
- _overwritten.yaml_
+ _custom.yml_
 
 ```yaml
   foo1: custom ${foo}
