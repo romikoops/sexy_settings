@@ -1,8 +1,8 @@
 # frozen_string_literal: true
+require_relative 'sensitive_data_protector'
 module SexySettings
   # This module holds print methods
   module Printable
-    PROTECTED_PROPERTIES = [/pass(\z|word)/i, /_key\z/i, /secret/i, /token/i].freeze
     def as_formatted_text(which = :all)
       props_list = property_list(which)
       max_key_size = props_list.map { |el| el.first.to_s.size }.max
@@ -41,15 +41,13 @@ module SexySettings
 
     def formatted_properties(data, max_key_size)
       data.sort_by(&:first).map do |(prop, value)|
-        value = hide_protected_data(value) if PROTECTED_PROPERTIES.any? { |el| el =~ prop }
+        value = protect_sensitive_data(prop, value)
         "#{indent}#{prop}#{indent + indent(max_key_size - prop.to_s.size)}=#{indent}#{value}"
       end
     end
 
-    def hide_protected_data(value)
-      return value if value.nil?
-      return '********' if value.to_s.size <= 4
-      "********#{value.to_s[-4..-1]}"
+    def protect_sensitive_data(prop, value)
+      SensitiveDataProtector.new(prop, value).protected_value
     end
   end
 end
