@@ -3,7 +3,7 @@ module SexySettings
   # This class holds logic sensitive data hiding
   class SensitiveDataProtector
     PROTECTED_PROPERTIES = [/pass(\z|word)/i, /_key\z/i, /secret/i, /token/i].freeze
-    URL_REGEXP = %r{\A(?:https?|ftp):\/\/(?:(?<userpass>.+)@)?.*:(?:[^\/]*)}i
+    URL_REGEXP = %r{\A(?:https?|ftp):\/\/(?:(?<userpass>.+)@)?.*:?(?:[^\/]*)}i
     attr_reader :prop, :value
 
     def initialize(prop, value)

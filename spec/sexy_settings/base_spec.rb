@@ -80,7 +80,7 @@ RSpec.describe 'Base' do
   passenger_name         =  Ivan Petrov
   password_confirmation  =  ********pass
   test1_url              =  http://********.com:********orld@host:80/wd/hub
-  test2_url              =  http://********.com@host:80/wd/hub
+  test2_url              =  http://********.com@host/wd/hub
   test3_url              =  http://********:********orld@host:80/wd/hub
   test4_url              =  #{}
   test5_url              =  http://host/wd/hub

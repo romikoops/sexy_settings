@@ -10,7 +10,7 @@ api_token: wer221wfqw23ef
 my_secret: ssdf3fvqww
 email: user@example.com
 test1_url: http://${email}:${user_pass}@host:80/wd/hub
-test2_url: http://${email}@host:80/wd/hub
+test2_url: http://${email}@host/wd/hub
 test3_url: http://:${user_pass}@host:80/wd/hub
 test4_url:
 test5_url: http://host/wd/hub
