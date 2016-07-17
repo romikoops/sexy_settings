@@ -16,15 +16,18 @@ It is a Ruby-based library used to specify application settings in different way
 * Using the YAML file (default and custom settings).
 * Using the command line.
 
-### What's new in 0.0.1
+### What's new in 0.0.2
 
-First version with the base functionality.
+- Ability to override delimiter on fly for command line settings
+- Hidden sensitive data in logging
+- Changed default environment variable name with options
 
 ## Getting Started
 
 ### Prerequisites
 
-It was tested with Ruby 1.9.2 but we expect it to also work with other Ruby versions
+It was tested with Ruby 2.0 but it expected to also work with other Ruby versions
+
 ### Installation
 
 >   gem install sexy_settings
@@ -35,29 +38,21 @@ Create 2 configuration files, one for default settings and the other one – for
 
 ```
 config\
-    default.yaml
-    overwritten.yaml
+    default.yml
+    custom.yml
 ```
 
   Insert the following code to the boot executable ruby file:
 
  ```ruby
  require 'sexy_settings'
-
- SexySettings.configure do |config|
-   config.path_to_default_settings = File.expand_path("config.yaml", File.join(File.dirname(__FILE__), '..', 'config')) # 'default.yml' by default
-   config.path_to_custom_settings = File.expand_path("overwritten.yaml", File.join(File.dirname(__FILE__), '..', 'config')) # 'custom.yml' by default
-   config.path_to_project = File.dirname(__FILE__) # '.' by default
-   config.env_variable_with_options = 'OPTIONS' # 'OPTS' by default
-   cmd_line_option_delimiter = '$$$' # ',' by default
- end
  ```
 
   Specify a shortcut method for the Settings object:
 
  ```ruby
  def settings
-   SexySettings::Base.instance()
+   SexySettings::Base.instance
  end
  ```
 
@@ -72,7 +67,7 @@ Thus, specifying some setting in the command line will override the same setting
 
 Example:
 
-_default.yaml_
+_default.yml_
 
 ```yaml
   foo: bar
@@ -80,7 +75,7 @@ _default.yaml_
   foo2: default value
 ```
 
- _overwritten.yaml_
+ _custom.yml_
 
 ```yaml
   foo1: custom ${foo}
@@ -88,7 +83,7 @@ _default.yaml_
 
 Set an environment variable:
 
-> OPTIONS="foo2=10$$$foo3=:hi$$$foo4=true"
+> SEXY_SETTINGS="foo2=10,foo3=:hi,foo4=true"
 
 ```ruby
 puts settings.foo # returns 'bar'
@@ -104,8 +99,38 @@ puts settings.foo4 # returns true
 * Add <_default config file_> under the version control system.
 * Add <_custom config file_> to ignore the list.
 *	Use the command line with an Environment Variable for fast specifying setting in your Continuous Integration System.
+* Specify custom delimiter with  SEXY_SETTINGS_DELIMITER environment variable in case you need unique delimiter for command line mode
 * Use the following code to output all settings as a pretty formatted text:
-
 ```ruby
 puts settings.as_formatted_text
 ```
+__Note__, all sensitive data will be masked.
+
+## Advanced settings
+
+You have ability to change some default settings:
+
+```ruby
+SexySettings.configure do |config|
+   config.path_to_default_settings = File.expand_path("config.yaml", File.join(File.dirname(__FILE__), '..', 'config')) # 'default.yml' by default
+   config.path_to_custom_settings = File.expand_path("overwritten.yaml", File.join(File.dirname(__FILE__), '..', 'config')) # 'custom.yml' by default
+   config.path_to_project = File.dirname(__FILE__) # '.' by default
+   config.env_variable_with_options = 'OPTIONS' # 'SEXY_SETTINGS' by default
+   cmd_line_option_delimiter = '$$$' # ',' by default
+end
+```
+
+Contributing
+------------
+
+Please see [CONTRIBUTING.md](https://github.com/romikoops/sexy_settings/blob/master/CONTRIBUTING.md).
+
+SexySettings was originally designed and is now maintained by Roman Parashchenko. You can find list of contributors here [open source
+community](https://github.com/romikoops/sexy_settings/graphs/contributors).
+
+License
+-------
+
+SexySettngs is Copyright © 2011-2016 Roman Parashchenko. It is free
+software, and may be redistributed under the terms specified in the
+[LICENSE](/LICENSE_MIT) file.

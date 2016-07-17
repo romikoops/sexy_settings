@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
+# Core module
 module SexySettings
   # Used internally to ensure examples get reloaded between multiple runs in
   # the same process.
   def self.reset
-    self.configuration.class::DEFAULT_OPTIONS.keys.each{|key| self.configuration.send("#{key}=", nil)}
+    configuration.class::DEFAULT_OPTIONS.keys.each { |key| configuration.send("#{key}=", nil) }
   end
 
   # Returns the global configuration object
@@ -21,7 +24,7 @@ module SexySettings
     if block_given?
       yield configuration
     else
-      self.configuration
+      configuration
     end
   end
 end

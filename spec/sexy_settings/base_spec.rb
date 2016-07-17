@@ -1,19 +1,22 @@
+# frozen_string_literal: true
 require 'spec_helper'
 
-describe 'Base' do
+RSpec.describe 'Base' do
   before :all do
     SexySettings.configure do |config|
-      config.path_to_default_settings = File.expand_path("config.yaml", File.join(File.dirname(__FILE__), '..', '_config'))
-      config.path_to_custom_settings = File.expand_path("overwritten.yaml", File.join(File.dirname(__FILE__), '..', '_config'))
+      config.path_to_default_settings =
+        File.expand_path('config.yaml', File.join(File.dirname(__FILE__), '..', '_config'))
+      config.path_to_custom_settings =
+        File.expand_path('overwritten.yaml', File.join(File.dirname(__FILE__), '..', '_config'))
       config.path_to_project = File.dirname(__FILE__)
       config.env_variable_with_options = 'OPTIONS'
     end
-    if ENV.has_key?(SexySettings.configuration.env_variable_with_options)
-      @original_options = ENV[SexySettings.configuration.env_variable_with_options]
-    else
-      @original_options = nil
-    end
-    ENV[SexySettings.configuration.env_variable_with_options] = "console_property=console CONSOLE value"
+    @original_options = if ENV.key?(SexySettings.configuration.env_variable_with_options)
+                          ENV[SexySettings.configuration.env_variable_with_options]
+                        else
+                          nil
+                        end
+    ENV[SexySettings.configuration.env_variable_with_options] = 'console_property=console CONSOLE value'
     @settings ||= settings
   end
 
@@ -24,97 +27,107 @@ describe 'Base' do
     end
   end
 
-  it "should be singleton object" do
-    SexySettings::Base.respond_to?(:instance).should be_true
-    SexySettings::Base.instance.is_a?(SexySettings::Base).should be_true
+  it 'should be singleton object' do
+    expect(SexySettings::Base.respond_to?(:instance)).to be_truthy
+    expect(SexySettings::Base.instance).to be_a(SexySettings::Base)
   end
 
-  it "should have getter for default setting" do
-    @settings.respond_to?(:default).should be_true
+  it 'should have getter for default setting' do
+    expect(@settings).to be_respond_to(:default)
     expected_default_settings = {
-        "default_property" => "default DEFAULT value",
-        "overwritten_property" => "default OVERWRITTEN value",
-        "console_property" => "default CONSOLE value"
+      'default_property' => 'default DEFAULT value',
+      'overwritten_property' => 'default OVERWRITTEN value',
+      'console_property' => 'default CONSOLE value'
     }
-    @settings.default.should == expected_default_settings
+    expect(@settings.default).to include(expected_default_settings)
   end
 
-  it "should have getter for custom setting" do
-    @settings.respond_to?(:default).should be_true
+  it 'should have getter for custom setting' do
+    expect(@settings).to be_respond_to(:default)
     expected_custom_settings = {
-        "overwritten_property" => "overwritten OVERWRITTEN value",
-        "console_property" => "overwritten CONSOLE value"
+      'overwritten_property' => 'overwritten OVERWRITTEN value',
+      'console_property' => 'overwritten CONSOLE value'
     }
-    @settings.custom.should == expected_custom_settings
+    expect(@settings.custom).to eq(expected_custom_settings)
   end
 
-  it "should have getter for all setting" do
-    @settings.respond_to?(:default).should be_true
+  it 'should have getter for all setting' do
+    expect(@settings).to be_respond_to(:default)
     expected_all_settings = {
-        "default_property" => "default DEFAULT value",
-        "overwritten_property" => "overwritten OVERWRITTEN value",
-        "console_property" => "console CONSOLE value"
+      'default_property' => 'default DEFAULT value',
+      'overwritten_property' => 'overwritten OVERWRITTEN value',
+      'console_property' => 'console CONSOLE value'
     }
-    @settings.all.should == expected_all_settings
+
+    expect(@settings.all).to include(expected_all_settings)
   end
 
-  it "should return specified pretty formatted settings for output" do
+  it 'should return specified pretty formatted settings for output' do
     expected = <<-eos
 #######################################################
 #                    All Settings                     #
 #######################################################
 
-  console_property      =  console CONSOLE value
-  default_property      =  default DEFAULT value
-  overwritten_property  =  overwritten OVERWRITTEN value
+  api_key                =  ********2333
+  api_token              =  ********23ef
+  console_property       =  console CONSOLE value
+  default_property       =  default DEFAULT value
+  keyword                =  ewggsdfgdeee
+  my_secret              =  ********vqww
+  overwritten_property   =  overwritten OVERWRITTEN value
+  pass                   =  ********
+  passenger_name         =  Ivan Petrov
+  password_confirmation  =  ********pass
+  user_pass              =  ********orld
 eos
-    @settings.as_formatted_text.should == expected
+    expect(@settings.as_formatted_text).to eq(expected)
   end
 
-  context "command line" do
-    before :all do
-      SexySettings.configure.env_variable_with_options = 'OPTS'
-      ENV['OPTS'] = "string=Test, int=1, float=1.09, boolean_true=true, boolean_false=false, symbol=:foo, reference = ${string}"
-      @clone_settings = settings.class.clone.instance
+  context 'command line' do
+    let(:clone_settings) { settings.class.clone.instance }
+    before do
+      SexySettings.configure.env_variable_with_options = 'SEXY_SETTINGS'
+      ENV['SEXY_SETTINGS'] = 'string=Test, int=1, float=1.09, boolean_true=true,' \
+                    ' boolean_false=false, symbol=:foo, reference = ${string}'
     end
 
-    after :all do
+    after do
       SexySettings.configure.env_variable_with_options = 'OPTIONS'
     end
 
-    it "should convert command line string value to String type" do
-      @clone_settings.string.should == 'Test'
+    it 'should convert command line string value to String type' do
+      expect(clone_settings.string).to eq('Test')
     end
 
-    it "should convert command line integer value to Fixnum type" do
-      @clone_settings.int.should == 1
-      @clone_settings.int.class.should == Fixnum
+    it 'should convert command line integer value to Fixnum type' do
+      expect(clone_settings.int).to eq(1)
+      expect(clone_settings.int.class).to eq(Fixnum)
     end
 
-    it "should convert command line float value to Float type" do
-      @clone_settings.float.should == 1.09
-      @clone_settings.float.class.should == Float
+    it 'should convert command line float value to Float type' do
+      expect(clone_settings.float).to eq(1.09)
+      expect(clone_settings.float.class).to eq(Float)
     end
 
-    it "should convert command line true value to TrueClass type" do
-      @clone_settings.boolean_true.should be_true
+    it 'should convert command line true value to TrueClass type' do
+      expect(clone_settings.boolean_true).to be_truthy
     end
 
-    it "should convert command line false value to FalseClass type" do
-      @clone_settings.boolean_false.should be_false
-      @clone_settings.boolean_false.class.should == FalseClass
+    it 'should convert command line false value to FalseClass type' do
+      expect(clone_settings.boolean_false).to be_falsy
+      expect(clone_settings.boolean_false.class).to eq(FalseClass)
     end
 
-    it "should convert command line symbol value to Symbol type" do
-      @clone_settings.symbol.should == :foo
+    it 'should convert command line symbol value to Symbol type' do
+      expect(clone_settings.symbol).to eq(:foo)
     end
 
-    it "should replace command line reference to correct value" do
-      @clone_settings.reference == 'Test'
+    it 'should replace command line reference to correct value' do
+      expect(clone_settings.reference).to eq('Test')
     end
   end
 end
 
 def settings
-  SexySettings::Base.instance()
+  SexySettings::Base.instance
 end
