@@ -78,6 +78,9 @@ RSpec.describe 'Base' do
   pass                   =  ********
   passenger_name         =  Ivan Petrov
   password_confirmation  =  ********pass
+  test1_url              =  http://********deee:********orld@host:80/wd/hub
+  test2_url              =  http://********deee@host:80/wd/hub
+  test3_url              =  http://********:********orld@host:80/wd/hub
   user_pass              =  ********orld
 eos
     expect(@settings.as_formatted_text).to eq(expected)
