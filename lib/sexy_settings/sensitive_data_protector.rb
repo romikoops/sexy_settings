@@ -3,7 +3,7 @@ module SexySettings
   # This class holds logic sensitive data hiding
   class SensitiveDataProtector
     PROTECTED_PROPERTIES = [/pass(\z|word)/i, /_key\z/i, /secret/i, /token/i].freeze
-    URL_REGEXP = %r{\A(https?|ftp):\/\/((?<userpass>(?<user>.*?)(:(?<pass>.*?)|))@)?[^:\/\s]+:([^\/]*)}i
+    URL_REGEXP = %r{\A(?:https?|ftp):\/\/(?:(?<userpass>.+)@)?.*:(?:[^\/]*)}i
     attr_reader :prop, :value
 
     def initialize(prop, value)
@@ -25,16 +25,13 @@ module SexySettings
 
     def hide_protected_data_in_url(value)
       return value if value.nil? || !(URL_REGEXP =~ value)
-      match_data = URL_REGEXP.match(value)
-      hide_user_pass(value, match_data)
+      userpass = URL_REGEXP.match(value)[:userpass]
+      return value if userpass.nil? || userpass.empty?
+      value.sub(userpass, protected_userpass(userpass))
     end
 
-    def hide_user_pass(value, match_data)
-      user = match_data[:user]
-      pass = match_data[:pass]
-      userpass = match_data[:userpass]
-      protected_data = "#{hide_protected_data(user) if user}#{":#{hide_protected_data(pass)}" if pass}"
-      value.sub(userpass, protected_data)
+    def protected_userpass(value)
+      value.split(':', 2).compact.map(&method(:hide_protected_data)).join(':')
     end
   end
 end

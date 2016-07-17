@@ -63,6 +63,7 @@ RSpec.describe 'Base' do
   end
 
   it 'should return specified pretty formatted settings for output' do
+    # rubocop:disable Lint/EmptyInterpolation
     expected = <<-eos
 #######################################################
 #                    All Settings                     #
@@ -72,17 +73,20 @@ RSpec.describe 'Base' do
   api_token              =  ********23ef
   console_property       =  console CONSOLE value
   default_property       =  default DEFAULT value
-  keyword                =  ewggsdfgdeee
+  email                  =  user@example.com
   my_secret              =  ********vqww
   overwritten_property   =  overwritten OVERWRITTEN value
   pass                   =  ********
   passenger_name         =  Ivan Petrov
   password_confirmation  =  ********pass
-  test1_url              =  http://********deee:********orld@host:80/wd/hub
-  test2_url              =  http://********deee@host:80/wd/hub
+  test1_url              =  http://********.com:********orld@host:80/wd/hub
+  test2_url              =  http://********.com@host:80/wd/hub
   test3_url              =  http://********:********orld@host:80/wd/hub
+  test4_url              =  #{}
+  test5_url              =  http://host/wd/hub
   user_pass              =  ********orld
 eos
+    # rubocop:enable Lint/EmptyInterpolation
     expect(@settings.as_formatted_text).to eq(expected)
   end
 

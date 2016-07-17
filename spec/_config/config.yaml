@@ -2,13 +2,15 @@ default_property: default DEFAULT value
 overwritten_property: default OVERWRITTEN value
 console_property: default CONSOLE value
 pass: 123
-user_pass: helloworld
+user_pass: hello:world
 api_key: '12341234123222333'
 password_confirmation: 'mysuperpass'
 passenger_name: 'Ivan Petrov'
 api_token: wer221wfqw23ef
 my_secret: ssdf3fvqww
-keyword: ewggsdfgdeee
-test1_url: http://${keyword}:${user_pass}@host:80/wd/hub
-test2_url: http://${keyword}@host:80/wd/hub
+email: user@example.com
+test1_url: http://${email}:${user_pass}@host:80/wd/hub
+test2_url: http://${email}@host:80/wd/hub
 test3_url: http://:${user_pass}@host:80/wd/hub
+test4_url:
+test5_url: http://host/wd/hub
