@@ -12,6 +12,8 @@ Gem::Specification.new do |s|
   s.summary     = 'Flexible specifying of application settings'
   s.description = 'Library for flexible specifying of application settings different ways'
   s.rubyforge_project = 'sexy_settings'
+  s.license     = 'MIT'
+  s.required_ruby_version = '>= 1.9.3'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
