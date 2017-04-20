@@ -3,6 +3,7 @@
 
 AllCops:
   TargetRubyVersion: 2.3
+  DisplayCopNames: true
 
 LineLength:
   Max: 120
@@ -21,3 +22,12 @@ Style/CaseEquality:
 
 MethodLength:
   Max: 30
+
+Metrics/ClassLength:
+  Max: 120
+
+Metrics/BlockLength:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false

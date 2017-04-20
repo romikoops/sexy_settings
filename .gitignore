@@ -6,3 +6,4 @@ pkg/*
 .byebug_history
 .yardoc/
 doc/
+.ruby-version

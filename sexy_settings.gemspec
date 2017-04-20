@@ -1,5 +1,3 @@
-# -*- encoding: utf-8 -*-
-# frozen_string_literal: true
 $LOAD_PATH.push File.expand_path('../lib', __FILE__)
 require 'sexy_settings/version'
 
@@ -13,7 +11,7 @@ Gem::Specification.new do |s|
   s.description = 'Library for flexible specifying of application settings different ways'
   s.rubyforge_project = 'sexy_settings'
   s.license = 'MIT'
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 2.2.2'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
@@ -22,4 +20,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~>3.5'
   s.add_development_dependency('rake')
   s.add_development_dependency('yard')
+  s.add_development_dependency('rubocop')
 end

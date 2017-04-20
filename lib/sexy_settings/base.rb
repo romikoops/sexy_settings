@@ -1,7 +1,7 @@
-# frozen_string_literal: true
 require 'singleton'
 require 'yaml'
 require_relative 'printable'
+require_relative 'exceptions'
 
 module SexySettings
   # This class represents core functionality
@@ -11,12 +11,18 @@ module SexySettings
     include Singleton
     include Printable
 
-    # Priorities: command_line > custom.yml > default.yml > nil
+    # Priorities: command_line > custom.yml > default.yml
     def initialize
-      @default = load_settings(config.path_to_default_settings)
-      @custom = load_settings(config.path_to_custom_settings)
+      @default = load_default_settings
+      @custom = load_custom_settings
       init_command_line_settings
       init_all_settings
+      validate_default_settings
+      define_dynamic_methods
+    end
+
+    def inspect
+      'SexySettings::Base'
     end
 
     private
@@ -25,30 +31,46 @@ module SexySettings
       SexySettings.configuration
     end
 
-    def load_settings(path)
-      File.exist?(path) ? YAML.load_file(path) : {}
+    def define_dynamic_methods
+      @default.keys.each do |setting|
+        self.class.instance_eval do
+          define_method(setting) { @all[setting] }
+          define_method("#{setting}=") do |value|
+            @all[setting] = value
+          end
+        end
+      end
+    end
+
+    def validate_default_settings
+      incorrect_settings = @all.keys - @default.keys
+      return if incorrect_settings.empty?
+      path = config.path_to_default_settings
+      raise SexySettings::MissingDefaultError, "Please specify defaults in '#{path}' config file:\n" +
+                                               incorrect_settings.map { |el| "\t\t#{el}: someValue" }.join("\n")
+    end
+
+    def load_default_settings
+      path = config.path_to_default_settings
+      YAML.load_file(path) || {}
+    end
+
+    def load_custom_settings
+      path = config.path_to_custom_settings
+      return {} unless File.exist?(path)
+      YAML.load_file(path) || {}
     end
 
     #  Parse the compound setting.
     #  Parts of this config_parser must be defined earlier.
     #  You can define an option as option=${another_option_name}/something
     def get_compound_value(value)
-      if /\$\{(.*?)\}/ =~ value.to_s
-        var = /\$\{(.*?)\}/.match(value.to_s)[1]
-        exist_var = @all[var]
-        raise ArgumentError, "Did you define this setting '#{var}' before?" if exist_var.nil?
-        value["${#{var}}"] = exist_var.to_s if var
-        get_compound_value(value)
-      end
-      value
-    end
-
-    def method_missing(name, *args)
-      if name.to_s =~ /=$/
-        @all[name.to_s] = args[0] if @all.key?(name.to_s)
-      else
-        @all[name.to_s]
-      end
+      return value unless /\$\{(.*?)\}/ =~ value.to_s
+      var = /\$\{(.*?)\}/.match(value.to_s)[1]
+      exist_var = @all[var]
+      raise ArgumentError, "Did you define this setting '#{var}' before?" if exist_var.nil?
+      value["${#{var}}"] = exist_var.to_s if var
+      get_compound_value(value)
     end
 
     # Try to convert a value from String to other types (int, boolean, float)
@@ -95,7 +117,7 @@ module SexySettings
       value = value.chomp.strip if value
       new_value = ''
       if value
-        new_value = (value =~ /^["](.*)["]$/) ? Regexp.last_match(1) : value
+        new_value = value =~ /^["](.*)["]$/ ? Regexp.last_match(1) : value
       end
       new_value = try_convert_value(new_value) if new_value.class == String
       [param.chomp.strip, new_value]

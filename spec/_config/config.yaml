@@ -14,3 +14,10 @@ test2_url: http://${email}@host/wd/hub
 test3_url: http://:${user_pass}@host:80/wd/hub
 test4_url:
 test5_url: http://host/wd/hub
+string: 'default'
+int: 'default'
+float: 'default'
+boolean_true: 'default'
+boolean_false: 'default'
+symbol: 'default'
+reference: 'default'

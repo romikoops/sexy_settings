@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module SexySettings
   # This class holds logic sensitive data hiding
   class SensitiveDataProtector
@@ -24,7 +23,7 @@ module SexySettings
     end
 
     def hide_protected_data_in_url(value)
-      return value if value.nil? || !(URL_REGEXP =~ value)
+      return value if value.nil? || URL_REGEXP !~ value
       userpass = URL_REGEXP.match(value)[:userpass]
       return value if userpass.nil? || userpass.empty?
       value.sub(userpass, protected_userpass(userpass))
