@@ -65,37 +65,39 @@ RSpec.describe 'Base' do
     it 'should return specified pretty formatted settings for output' do
       # rubocop:disable Lint/EmptyInterpolation
       # rubocop:disable Lint/EmptyExpression
-      expected = <<~eos
-        #######################################################
-        #                    All Settings                     #
-        #######################################################
+      # rubocop:disable Style/IndentHeredoc
+      expected = <<-TXT
+#######################################################
+#                    All Settings                     #
+#######################################################
 
-          api_key                =  ********2333
-          api_token              =  ********23ef
-          boolean_false          =  default
-          boolean_true           =  default
-          console_property       =  console CONSOLE value
-          default_property       =  default DEFAULT value
-          email                  =  user@example.com
-          float                  =  default
-          int                    =  default
-          my_secret              =  ********vqww
-          overwritten_property   =  overwritten OVERWRITTEN value
-          pass                   =  ********
-          passenger_name         =  Ivan Petrov
-          password_confirmation  =  ********pass
-          reference              =  default
-          string                 =  default
-          symbol                 =  default
-          test1_url              =  http://********.com:********orld@host:80/wd/hub
-          test2_url              =  http://********.com@host/wd/hub
-          test3_url              =  http://********:********orld@host:80/wd/hub
-          test4_url              =  #{}
-          test5_url              =  http://host/wd/hub
-          user_pass              =  ********orld
-  eos
+  api_key                =  ********2333
+  api_token              =  ********23ef
+  boolean_false          =  default
+  boolean_true           =  default
+  console_property       =  console CONSOLE value
+  default_property       =  default DEFAULT value
+  email                  =  user@example.com
+  float                  =  default
+  int                    =  default
+  my_secret              =  ********vqww
+  overwritten_property   =  overwritten OVERWRITTEN value
+  pass                   =  ********
+  passenger_name         =  Ivan Petrov
+  password_confirmation  =  ********pass
+  reference              =  default
+  string                 =  default
+  symbol                 =  default
+  test1_url              =  http://********.com:********orld@host:80/wd/hub
+  test2_url              =  http://********.com@host/wd/hub
+  test3_url              =  http://********:********orld@host:80/wd/hub
+  test4_url              =  #{}
+  test5_url              =  http://host/wd/hub
+  user_pass              =  ********orld
+  TXT
       # rubocop:enable Lint/EmptyInterpolation
       # rubocop:enable Lint/EmptyExpression
+      # rubocop:enable Style/IndentHeredoc
       expect(@settings.as_formatted_text).to eq(expected)
     end
 
@@ -163,7 +165,7 @@ RSpec.describe 'Base' do
       it 'raise undefined method error' do
         expect { clone_settings.emial }.to raise_error(
           NoMethodError,
-          "undefined method `emial' for SexySettings::Base:#{clone_settings.class}\nDid you mean?  email"
+          /undefined method `emial' for SexySettings::Base:#{clone_settings.class}/
         )
       end
     end
