@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require 'sexy_settings/version'
 require 'sexy_settings/configuration'
 require 'sexy_settings/base'

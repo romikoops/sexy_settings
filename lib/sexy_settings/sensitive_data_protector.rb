@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module SexySettings
   # This class holds logic sensitive data hiding
   class SensitiveDataProtector

@@ -16,6 +16,11 @@ It is a Ruby-based library used to specify application settings in different way
 * Using the YAML file (default and custom settings).
 * Using the command line.
 
+### What's new in 0.0.3
+
+- Stop supporting Ruby < 2.2.2
+- Fixed issue [Exception on empty custom.yml](https://github.com/romikoops/sexy_settings/issues/6)
+
 ### What's new in 0.0.2
 
 - Ability to override delimiter on fly for command line settings
@@ -26,7 +31,7 @@ It is a Ruby-based library used to specify application settings in different way
 
 ### Prerequisites
 
-It was tested with Ruby 2.0 but it expected to also work with other Ruby versions
+Ruby 2.2.2+
 
 ### Installation
 
@@ -131,6 +136,6 @@ community](https://github.com/romikoops/sexy_settings/graphs/contributors).
 License
 -------
 
-SexySettngs is Copyright © 2011-2016 Roman Parashchenko. It is free
+SexySettngs is Copyright © 2011-2017 Roman Parashchenko. It is free
 software, and may be redistributed under the terms specified in the
 [LICENSE](/LICENSE_MIT) file.

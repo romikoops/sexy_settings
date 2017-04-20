@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require 'spec_helper'
 
 RSpec.describe 'Base' do
@@ -106,9 +105,9 @@ eos
       expect(clone_settings.string).to eq('Test')
     end
 
-    it 'should convert command line integer value to Fixnum type' do
+    it 'should convert command line integer value to Integer type' do
       expect(clone_settings.int).to eq(1)
-      expect(clone_settings.int.class).to eq(Fixnum)
+      expect(clone_settings.int).to be_a(Integer)
     end
 
     it 'should convert command line float value to Float type' do

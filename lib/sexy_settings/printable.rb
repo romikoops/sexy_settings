@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 require_relative 'sensitive_data_protector'
 module SexySettings
   # This module holds print methods
