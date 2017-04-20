@@ -2,7 +2,7 @@
 # To see all cops used see here: https://github.com/bbatsov/rubocop/blob/master/config/enabled.yml
 
 AllCops:
-  TargetRubyVersion: 2.4.1
+  TargetRubyVersion: 2.3
   DisplayCopNames: true
 
 LineLength:
@@ -24,7 +24,7 @@ MethodLength:
   Max: 30
 
 Metrics/ClassLength:
-  Max: 120  
+  Max: 120
 
 Metrics/BlockLength:
   Enabled: false

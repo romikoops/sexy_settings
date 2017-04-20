@@ -65,7 +65,7 @@ module SexySettings
     #  Parts of this config_parser must be defined earlier.
     #  You can define an option as option=${another_option_name}/something
     def get_compound_value(value)
-      return value unless /\$\{(.*?)\}/.match?(value.to_s)
+      return value unless /\$\{(.*?)\}/ =~ value.to_s
       var = /\$\{(.*?)\}/.match(value.to_s)[1]
       exist_var = @all[var]
       raise ArgumentError, "Did you define this setting '#{var}' before?" if exist_var.nil?

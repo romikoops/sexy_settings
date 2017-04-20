@@ -11,7 +11,7 @@ module SexySettings
     end
 
     def protected_value
-      return hide_protected_data_in_url(value) if /_url\z/.match?(prop)
+      return hide_protected_data_in_url(value) if /_url\z/ =~ prop
       return value unless PROTECTED_PROPERTIES.any? { |el| el =~ prop }
       hide_protected_data(value)
     end
